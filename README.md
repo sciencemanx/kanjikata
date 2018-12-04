@@ -6,6 +6,7 @@ Create Anki flashcards for kanji stroke order diagrams. Creating the flashcards 
 - `git clone https://github.com/sciencemanx/kanjikata.git`
 - `cd kanjikata`
 - `pip3 install git+https://github.com/sciencemanx/genanki.git@class-reorg`
+- `pip3 install progressbar2`
 
 ### Note
 The special genanki install is temporary until my patch is accepted by the
