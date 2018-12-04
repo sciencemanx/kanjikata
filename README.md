@@ -21,3 +21,8 @@ For example, the following command would download flashcards for levels 1, 2, 3,
 and 60 using the V1 WaniKani API key "abcd1234".
 
 `python3 kanjikata.py -k abdc1234 -l 1 2 3 60`
+
+## Credits
+Thanks to:
+- wanikani.com
+- kanji.sljfaq.org
