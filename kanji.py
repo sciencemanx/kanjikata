@@ -1,15 +1,18 @@
-from crabigator.wanikani import WaniKani
+from functools import reduce
+import os
 import requests as r
 
-import os
-from functools import reduce
+from crabigator.wanikani import WaniKani
+
 
 DIAGRAM_URL_FMT = 'https://kanji.sljfaq.org/kanjivg/memory.cgi?c={}'
+
 
 def mk_url(kanji):
   code = hex(ord(kanji))[2:]
 
   return DIAGRAM_URL_FMT.format(code)
+
 
 def download_stroke_diagram(kanji):
   url = mk_url(kanji)
@@ -17,6 +20,7 @@ def download_stroke_diagram(kanji):
   while b"HTML" in res:
     res = r.get(url).content
   return res
+
 
 def get_kanjis(wk_key, wk_level):
   wk = WaniKani(wk_key)

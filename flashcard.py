@@ -4,6 +4,7 @@ import genanki
 
 import kanji
 
+
 # don't change this unless you know what you're doing
 MODEL_ID = 1129694196
 DECK_ID_BASE = 1866861533
@@ -29,6 +30,7 @@ KANJI_MODEL = genanki.Model(
   ]
 )
 
+
 def make_deck(wk_level, kanjis):
   deck_id = DECK_ID_BASE + wk_level
   deck_name = 'Kanji Stroke Diagrams::Level {}'.format(wk_level)
@@ -44,6 +46,7 @@ def make_deck(wk_level, kanjis):
     deck.add_note(note)
 
   return deck
+
 
 def make_flashcards(wk_key, wk_levels):
   decks = []
