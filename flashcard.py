@@ -49,12 +49,17 @@ def make_flashcards(wk_key, wk_levels):
   decks = []
   images = []
 
+  print('creating decks for levels: {} ...'.format(wk_levels))
+
   for wk_level in wk_levels:
     kanjis = kanji.get_kanjis(wk_key, wk_level)
     deck = make_deck(wk_level, kanjis)
 
     images += [image for _, image in kanjis]
     decks.append(deck)
+    print('.', end='', flush=True)
+
+  print('')
 
   package = genanki.Package(decks)
   package.media_files = images
