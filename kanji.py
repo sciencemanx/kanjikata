@@ -1,49 +1,37 @@
-#! /bin/env python3
-
 from crabigator.wanikani import WaniKani
 import requests as r
 
 import os
 from functools import reduce
 
-key = 'XXXX'
-url_fmt = 'https://kanji.sljfaq.org/kanjivg/memory.cgi?c={}'
-
-wk = WaniKani(key)
+DIAGRAM_URL_FMT = 'https://kanji.sljfaq.org/kanjivg/memory.cgi?c={}'
 
 def mk_url(kanji):
-	code = hex(ord(kanji))[2:]
+  code = hex(ord(kanji))[2:]
 
-	return url_fmt.format(code)
+  return DIAGRAM_URL_FMT.format(code)
 
 def download_stroke_diagram(kanji):
-	url = mk_url(kanji)
-	res = r.get(url).content
-	while b"HTML" in res:
-		res = r.get(url).content
-	return res
+  url = mk_url(kanji)
+  res = r.get(url).content
+  while b"HTML" in res:
+    res = r.get(url).content
+  return res
 
-def do(level, folder="./"):
-	path = os.path.join(folder, str(level))
-	path = os.path.expanduser(path)
+def get_kanjis(wk_key, wk_level):
+  wk = WaniKani(wk_key)
+  kanjis = wk.get_kanji(levels=[wk_level])
 
-	if os.path.exists(path):
-		if not os.path.isdir(path):
-			return
-	else:
-		os.mkdir(path)
+  def process_kanji(i, kanji):
+    diagram = download_stroke_diagram(kanji.character)
+    meanings = ', '.join(kanji.meaning)
 
-	ks = wk.get_kanji(levels=[level])
+    kanji_path = '{}-{}-{}.png'.format(wk_level, i, meanings)
+    with open(kanji_path, "wb") as f:
+      f.write(diagram)
 
-	for i, k in enumerate(ks):
-		diagram = download_stroke_diagram(k.character)
-		meanings = ', '.join(k.meaning)
-		k_path = os.path.join(path, "{}:{} - {}.png".format(level, i+1, meanings))
-		with open(k_path, "wb") as f:
-			f.write(diagram)
-		print("{} - {}".format(k.character, meanings))
+    return meanings, kanji_path
 
-if __name__ == '__main__':
-	for i in range(17, 60):
-		print("---------   {}   -----------".format(i + 1))
-		do(i + 1, folder='~/kanji/')
+  processed_kanji = [process_kanji(i, k) for i, k in enumerate(kanjis)]
+
+  return processed_kanji
